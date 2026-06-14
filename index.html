@@ -4,94 +4,210 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weather Dashboard</title>
+<title>E-Commerce Product Catalog</title>
 
 <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
 body{
-    font-family: Arial, sans-serif;
     background:#f4f4f4;
+}
+
+header{
+    background:#2563eb;
+    color:white;
+    padding:20px;
     text-align:center;
-    padding:30px;
+}
+
+nav{
+    background:#1e40af;
+    padding:15px;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
 }
 
 .container{
-    max-width:500px;
+    max-width:1200px;
     margin:auto;
-    background:white;
     padding:20px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
-input{
-    width:70%;
+.search-box{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.search-box input{
+    width:80%;
+    max-width:400px;
     padding:10px;
 }
 
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    padding:15px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.price{
+    color:green;
+    font-size:20px;
+    margin:10px 0;
+}
+
 button{
+    background:#2563eb;
+    color:white;
+    border:none;
     padding:10px 15px;
+    border-radius:5px;
+    cursor:pointer;
 }
 
-.weather{
+footer{
+    text-align:center;
+    padding:20px;
+    background:#1e40af;
+    color:white;
     margin-top:20px;
-    font-size:18px;
 }
 
-.error{
-    color:red;
+@media(max-width:768px){
+    nav{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .search-box input{
+        width:95%;
+    }
 }
 </style>
 </head>
 <body>
 
+<header>
+    <h1>Maneesha Store</h1>
+    <p>E-Commerce Product Catalog</p>
+</header>
+
+<nav>
+    <a href="#">Home</a>
+    <a href="#">Products</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+</nav>
+
 <div class="container">
-    <h1>Weather Dashboard</h1>
 
-    <input type="text" id="city" placeholder="Enter city name">
-    <button onclick="getWeather()">Search</button>
-
-    <div id="result"></div>
+<div class="search-box">
+    <input type="text" id="searchInput"
+    placeholder="Search products..."
+    onkeyup="searchProducts()">
 </div>
 
+<div class="products" id="productContainer">
+
+<div class="card">
+    <img src="https://picsum.photos/300/220?1">
+    <h3>Laptop</h3>
+    <p class="price">₹45,000</p>
+    <button>View Product</button>
+</div>
+
+<div class="card">
+    <img src="https://picsum.photos/300/220?2">
+    <h3>Smartphone</h3>
+    <p class="price">₹20,000</p>
+    <button>View Product</button>
+</div>
+
+<div class="card">
+    <img src="https://picsum.photos/300/220?3">
+    <h3>Headphones</h3>
+    <p class="price">₹2,500</p>
+    <button>View Product</button>
+</div>
+
+<div class="card">
+    <img src="https://picsum.photos/300/220?4">
+    <h3>Smart Watch</h3>
+    <p class="price">₹5,000</p>
+    <button>View Product</button>
+</div>
+
+<div class="card">
+    <img src="https://picsum.photos/300/220?5">
+    <h3>Camera</h3>
+    <p class="price">₹30,000</p>
+    <button>View Product</button>
+</div>
+
+<div class="card">
+    <img src="https://picsum.photos/300/220?6">
+    <h3>Tablet</h3>
+    <p class="price">₹15,000</p>
+    <button>View Product</button>
+</div>
+
+</div>
+</div>
+
+<footer>
+    <p>© 2026 Maneesha Store | E-Commerce Project</p>
+</footer>
+
 <script>
-async function getWeather() {
-    const city = document.getElementById("city").value;
-    const result = document.getElementById("result");
+function searchProducts(){
+    let input =
+    document.getElementById("searchInput")
+    .value.toLowerCase();
 
-    if(!city){
-        result.innerHTML = "<p class='error'>Please enter a city name.</p>";
-        return;
-    }
+    let cards =
+    document.querySelectorAll(".card");
 
-    try {
-        const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=YOUR_API_KEY&units=metric`
-        );
+    cards.forEach(card=>{
+        let name =
+        card.querySelector("h3")
+        .textContent.toLowerCase();
 
-        if(!response.ok){
-            throw new Error("City not found");
+        if(name.includes(input)){
+            card.style.display="block";
         }
-
-        const data = await response.json();
-
-        result.innerHTML = `
-            <div class="weather">
-                <h2>${data.name}</h2>
-                <p>🌡 Temperature: ${data.main.temp} °C</p>
-                <p>💧 Humidity: ${data.main.humidity}%</p>
-                <p>💨 Wind Speed: ${data.wind.speed} m/s</p>
-                <p>☁ Weather: ${data.weather[0].description}</p>
-            </div>
-        `;
-    }
-    catch(error){
-        result.innerHTML =
-        `<p class="error">${error.message}</p>`;
-    }
+        else{
+            card.style.display="none";
+        }
+    });
 }
 </script>
 
 </body>
 </html>
 ```
-
