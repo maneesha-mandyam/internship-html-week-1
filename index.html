@@ -1,10 +1,197 @@
+```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>My Portfolio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maneesha Portfolio</title>
+
+<style>
+:root{
+  --bg:#f4f4f4;
+  --text:#222;
+  --card:#fff;
+  --primary:#2563eb;
+}
+
+.dark{
+  --bg:#121212;
+  --text:#fff;
+  --card:#1e1e1e;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+header{
+  background:var(--primary);
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+
+nav{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  padding:15px;
+  background:#333;
+}
+
+nav a{
+  color:white;
+  text-decoration:none;
+}
+
+.container{
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:20px;
+  padding:20px;
+}
+
+.sidebar{
+  background:var(--card);
+  padding:20px;
+  border-radius:10px;
+}
+
+.content{
+  background:var(--card);
+  padding:20px;
+  border-radius:10px;
+}
+
+.projects{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+  margin-top:20px;
+}
+
+.project{
+  background:#e5e7eb;
+  padding:15px;
+  border-radius:10px;
+}
+
+.contact{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:20px;
+}
+
+input,textarea{
+  padding:10px;
+}
+
+button{
+  padding:10px;
+  border:none;
+  background:var(--primary);
+  color:white;
+  cursor:pointer;
+}
+
+.theme-btn{
+  margin-top:10px;
+}
+
+footer{
+  text-align:center;
+  padding:20px;
+}
+
+@media(max-width:768px){
+  .container{
+    grid-template-columns:1fr;
+  }
+
+  nav{
+    flex-direction:column;
+    align-items:center;
+  }
+}
+</style>
 </head>
+
 <body>
+
+<header>
 <h1>Maneesha Portfolio</h1>
-<p>Welcome to my portfolio website.</p>
+<p>IT Student & Web Developer</p>
+<button class="theme-btn" onclick="toggleTheme()">Toggle Dark Mode</button>
+</header>
+
+<nav>
+<a href="#">Home</a>
+<a href="#">About</a>
+<a href="#">Projects</a>
+<a href="#">Contact</a>
+</nav>
+
+<div class="container">
+
+<div class="sidebar">
+<h2>About Me</h2>
+<p>
+I am a 3rd Year B.Tech IT student interested in Web Development,
+Java and Software Engineering.
+</p>
+</div>
+
+<div class="content">
+<h2>Projects</h2>
+
+<div class="projects">
+<div class="project">
+<h3>Portfolio Website</h3>
+<p>Responsive HTML/CSS Portfolio.</p>
+</div>
+
+<div class="project">
+<h3>Student Management System</h3>
+<p>Java based project.</p>
+</div>
+
+<div class="project">
+<h3>Weather App</h3>
+<p>Built using HTML, CSS and JavaScript.</p>
+</div>
+</div>
+
+<h2 style="margin-top:20px;">Contact</h2>
+
+<form class="contact">
+<input type="text" placeholder="Your Name">
+<input type="email" placeholder="Your Email">
+<textarea rows="5" placeholder="Message"></textarea>
+<button type="submit">Send</button>
+</form>
+
+</div>
+</div>
+
+<footer>
+<p>© 2026 Maneesha Portfolio</p>
+</footer>
+
+<script>
+function toggleTheme(){
+document.body.classList.toggle("dark");
+}
+</script>
+
 </body>
 </html>
+```
