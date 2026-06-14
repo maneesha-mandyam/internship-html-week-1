@@ -4,192 +4,166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maneesha Portfolio</title>
+<title>To-Do App</title>
 
 <style>
-:root{
-  --bg:#f4f4f4;
-  --text:#222;
-  --card:#fff;
-  --primary:#2563eb;
-}
-
-.dark{
-  --bg:#121212;
-  --text:#fff;
-  --card:#1e1e1e;
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
 body{
-  font-family:Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
+    font-family:Arial,sans-serif;
+    max-width:700px;
+    margin:30px auto;
+    padding:20px;
+    background:#f4f4f4;
 }
 
-header{
-  background:var(--primary);
-  color:white;
-  text-align:center;
-  padding:20px;
+h1{
+    text-align:center;
 }
 
-nav{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  padding:15px;
-  background:#333;
+.input-section{
+    display:flex;
+    gap:10px;
 }
 
-nav a{
-  color:white;
-  text-decoration:none;
-}
-
-.container{
-  display:grid;
-  grid-template-columns:1fr 2fr;
-  gap:20px;
-  padding:20px;
-}
-
-.sidebar{
-  background:var(--card);
-  padding:20px;
-  border-radius:10px;
-}
-
-.content{
-  background:var(--card);
-  padding:20px;
-  border-radius:10px;
-}
-
-.projects{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:15px;
-  margin-top:20px;
-}
-
-.project{
-  background:#e5e7eb;
-  padding:15px;
-  border-radius:10px;
-}
-
-.contact{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:20px;
-}
-
-input,textarea{
-  padding:10px;
+input{
+    flex:1;
+    padding:10px;
 }
 
 button{
-  padding:10px;
-  border:none;
-  background:var(--primary);
-  color:white;
-  cursor:pointer;
+    padding:10px 15px;
+    cursor:pointer;
 }
 
-.theme-btn{
-  margin-top:10px;
+.filters{
+    margin:20px 0;
+    display:flex;
+    gap:10px;
+    justify-content:center;
 }
 
-footer{
-  text-align:center;
-  padding:20px;
-}
-
-@media(max-width:768px){
-  .container{
-    grid-template-columns:1fr;
-  }
-
-  nav{
-    flex-direction:column;
+li{
+    list-style:none;
+    background:white;
+    margin:10px 0;
+    padding:10px;
+    display:flex;
+    justify-content:space-between;
     align-items:center;
-  }
+    border-radius:5px;
+}
+
+.completed{
+    text-decoration:line-through;
+    color:gray;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>Maneesha Portfolio</h1>
-<p>IT Student & Web Developer</p>
-<button class="theme-btn" onclick="toggleTheme()">Toggle Dark Mode</button>
-</header>
+<h1>To-Do List App</h1>
 
-<nav>
-<a href="#">Home</a>
-<a href="#">About</a>
-<a href="#">Projects</a>
-<a href="#">Contact</a>
-</nav>
-
-<div class="container">
-
-<div class="sidebar">
-<h2>About Me</h2>
-<p>
-I am a 3rd Year B.Tech IT student interested in Web Development,
-Java and Software Engineering.
-</p>
+<div class="input-section">
+    <input type="text" id="taskInput" placeholder="Enter task">
+    <button onclick="addTask()">Add</button>
 </div>
 
-<div class="content">
-<h2>Projects</h2>
-
-<div class="projects">
-<div class="project">
-<h3>Portfolio Website</h3>
-<p>Responsive HTML/CSS Portfolio.</p>
+<div class="filters">
+    <button onclick="filterTasks('all')">All</button>
+    <button onclick="filterTasks('active')">Active</button>
+    <button onclick="filterTasks('completed')">Completed</button>
 </div>
 
-<div class="project">
-<h3>Student Management System</h3>
-<p>Java based project.</p>
-</div>
-
-<div class="project">
-<h3>Weather App</h3>
-<p>Built using HTML, CSS and JavaScript.</p>
-</div>
-</div>
-
-<h2 style="margin-top:20px;">Contact</h2>
-
-<form class="contact">
-<input type="text" placeholder="Your Name">
-<input type="email" placeholder="Your Email">
-<textarea rows="5" placeholder="Message"></textarea>
-<button type="submit">Send</button>
-</form>
-
-</div>
-</div>
-
-<footer>
-<p>© 2026 Maneesha Portfolio</p>
-</footer>
+<ul id="taskList"></ul>
 
 <script>
-function toggleTheme(){
-document.body.classList.toggle("dark");
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let currentFilter = "all";
+
+function saveTasks(){
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
+function renderTasks(){
+    const taskList = document.getElementById("taskList");
+    taskList.innerHTML = "";
+
+    let filteredTasks = tasks.filter(task=>{
+        if(currentFilter==="active") return !task.completed;
+        if(currentFilter==="completed") return task.completed;
+        return true;
+    });
+
+    filteredTasks.forEach((task,index)=>{
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+            <span class="${task.completed ? 'completed':''}">
+                ${task.text}
+            </span>
+
+            <div>
+                <button onclick="toggleTask(${index})">
+                    ${task.completed ? 'Undo':'Done'}
+                </button>
+
+                <button onclick="editTask(${index})">
+                    Edit
+                </button>
+
+                <button onclick="deleteTask(${index})">
+                    Delete
+                </button>
+            </div>
+        `;
+
+        taskList.appendChild(li);
+    });
+}
+
+function addTask(){
+    const input = document.getElementById("taskInput");
+
+    if(input.value.trim()==="") return;
+
+    tasks.push({
+        text:input.value,
+        completed:false
+    });
+
+    input.value="";
+    saveTasks();
+    renderTasks();
+}
+
+function toggleTask(index){
+    tasks[index].completed=!tasks[index].completed;
+    saveTasks();
+    renderTasks();
+}
+
+function editTask(index){
+    let updated = prompt("Edit Task", tasks[index].text);
+
+    if(updated!==null && updated.trim()!==""){
+        tasks[index].text = updated;
+        saveTasks();
+        renderTasks();
+    }
+}
+
+function deleteTask(index){
+    tasks.splice(index,1);
+    saveTasks();
+    renderTasks();
+}
+
+function filterTasks(type){
+    currentFilter = type;
+    renderTasks();
+}
+
+renderTasks();
 </script>
 
 </body>
